@@ -232,23 +232,30 @@ def read_combined_dataframe(file_list):
 
 def move_column(df, column_name, insert_index):
     """
-    移動DataFrame中的既存欄位到指定位置。
+    移動 DataFrame 中的既存欄位到指定位置。
 
     Args:
-        df (pd.DataFrame): 要操作的DataFrame。
+        df (pd.DataFrame): 要操作的 DataFrame。
         column_name (str): 要移動的欄位名稱。
-        insert_index (int): 欲插入的新位置索引（從0開始）。
+        insert_index (int): 欲插入的新位置索引（從 0 開始）。
+                            若為 -1，則將欄位移至最後一欄。
 
     Returns:
-        pd.DataFrame: 調整後的DataFrame。
+        pd.DataFrame: 調整後的 DataFrame。
     """
     if column_name not in df.columns:
         raise ValueError(f"Column '{column_name}' does not exist in DataFrame.")
     
-    columns = df.columns.tolist() # 取得目前欄位順序
-    columns.remove(column_name) # 移除該欄位
-    columns.insert(insert_index, column_name) # 在指定位置插入該欄位
-    return df[columns] # 重新排列DataFrame
+    columns = df.columns.tolist()
+    columns.remove(column_name)
+
+    # -1 表示移到最後一欄
+    if insert_index == -1:
+        insert_index = len(columns)
+
+    columns.insert(insert_index, column_name)
+    return df[columns]
+
     
 def get_excel_sheet_names(path):
     """
